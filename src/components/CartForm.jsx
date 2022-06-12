@@ -1,17 +1,33 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { Container, Box, Typography, TextField } from '@mui/material';
 
-const CartForm = () => {
+const CartForm = ({ handleInputSubmit }) => {
+
+  const name = useRef(null);
+  const phone = useRef(null);
+  const email = useRef(null);
+
+  const setValues = () => {
+    handleInputSubmit({
+      name: name.current.value,
+      phone: phone.current.value,
+      email: email.current.value,
+    })
+  }
+
   return (
     <Container maxWidth='x1' >
         <Box>
-            <Typography variant='body1'>
-                Tu orden esta casi lista <br />
-                Llena los datos y alguien de nuestro equipo s pondrá en contácto pronto con tigo!
+            <Typography variant='h5' gutterBottom>
+                Datos de Cóntacto
             </Typography>
-            <TextField id="outlined-basic" label="nombre" variant="outlined" />
-            <TextField id="outlined-basic" label="celular" variant="outlined" />
+
+            <Box sx={{display: 'flex', flexDirection: 'column', gap: '30px' }} >
+              <TextField onChange={setValues} inputRef={name} type='text' id="outlined-basic" label="tu nombre" variant="outlined" />
+              <TextField onChange={setValues} inputRef={phone} type='number' id="outlined-basic" label="tu celular" variant="outlined" />
+              <TextField onChange={setValues} inputRef={email} type='email' id="outlined-basic" label="tu correo (opcional)" variant="outlined" />
+            </Box>
         </Box>
     </Container>
   )

@@ -10,10 +10,10 @@ const CartGrid = ({  }) => {
     const [state] = useContext(CartContext);
 
     return (
-    <Container maxWidth='x1' >
+    <Container maxWidth='x1' sx={{ padding: '0'}} >
         <Grid container spacing={6} >
             { state.products.map((product, index)=>(
-                <Grid item xs={11} sm={6}   key={product.name+index}>
+                <Grid item xs={12} sm={6}   key={product.name+index}>
                     <CartCard product={ product } />       
                 </Grid>
             ))}

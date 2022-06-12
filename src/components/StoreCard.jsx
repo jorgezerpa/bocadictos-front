@@ -7,10 +7,13 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { increaseProductQuantity } from '../store/states';
 
-const StoreCard = ({ product }) => {
+const StoreCard = ({ product, isAddedBool }) => {
     const myTheme = useTheme(); 
-    const [isAdded, setIsAdded] = useState(false);
     const [ state, dispatch, addProduct, removeProduct, increaseQuantity, decreaseQuantity, manualQuantityChange] = useContext(CartContext);
+
+
+
+    const [isAdded, setIsAdded] = useState(isAddedBool);
     const inputQuantity = useRef(null);
 
 
@@ -20,7 +23,7 @@ const StoreCard = ({ product }) => {
     }
     
     const HandleRemoveFromCart = (product) => {
-        dispatch(removeProduct(product))
+        let a = dispatch(removeProduct(product));
         setIsAdded(false);
     }
     
@@ -64,7 +67,7 @@ const StoreCard = ({ product }) => {
             <CardActions sx={{display:'flex', justifyContent: 'space-between', alignItems: 'center'}} >
 
                 { !isAdded && <Button variant='cardButton' onClick={()=>HandleAddToCart(product)} >Agregar</Button> }
-                { isAdded && <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remove</Button> }
+                { isAdded && <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remover</Button> }
 
                 { isAdded && (
                     <Box sx={{display:'flex', justifyContent: 'center', alignItems: 'center'}}>

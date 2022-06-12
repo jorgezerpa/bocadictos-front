@@ -13,6 +13,7 @@ const CartCard = ({ product }) => {
     const inputQuantity = useRef(null);
 
 
+
     const HandleAddToCart = (product) => {
         dispatch(addProduct(product))
         setIsAdded(true);
@@ -51,7 +52,7 @@ const CartCard = ({ product }) => {
 
 
   return (
-    <Card>
+    <Card >
         <CardMedia sx={{ position: 'relative', height: '100px', overflow: 'hidden'  }}>
             <img src={product.image} alt=""  style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)'}} />
         </CardMedia>
@@ -59,10 +60,10 @@ const CartCard = ({ product }) => {
                 <Typography variant='h6' gutterBottom sx={{fontSize: '1rem', fontWeight: 'bold'}}>{ product.name }</Typography>
                 <Typography sx={{fontSize: '.8rem', fontStyle:'italic'}} >{ product.price} $</Typography>
             </CardContent>
-            <CardActions sx={{display:'flex', justifyContent: 'space-between', alignItems: 'center'}} >
-                <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remove</Button> 
+            <CardActions sx={{display:'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap:'wrap'}} >
+                <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remover</Button> 
                 
-                <Box sx={{display:'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Box sx={{display:'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <RemoveCircleIcon onClick={()=>handleDecreaseQuantity(product)}  sx={{color: myTheme.palette.primary.light }} />
                     <input ref={inputQuantity} onBlur={handleOnBlur} onChange={handleChange}  type='number' value={ product.quantity } style={{ width: '2rem' }} ></input>
                     <AddBoxIcon onClick={()=>handleIncreaseQuantity(product)} sx={{color: myTheme.palette.primary.light }} />

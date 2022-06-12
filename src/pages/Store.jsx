@@ -12,6 +12,8 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 
 export default function Store() {
+  const [open, setOpen] = React.useState(false);
+
   const [value, setValue] = React.useState('1');
   const [state, dispatch] = useReducer(
       CartReducer,
@@ -29,31 +31,30 @@ export default function Store() {
 
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList centered onChange={handleChange} aria-label="">
+              <TabList variant="scrollable" onChange={handleChange} aria-label="" scrollButtons={true} allowScrollButtonsMobile>
                 <Tab label="Todo" value="1" />
                 <Tab label="Dulce" value="2" />
                 <Tab label="Salado" value="3" />
                 <Tab label="Combos" value="4" />
-                <Typography>Cart</Typography>
               </TabList>
             </Box>
             <TabPanel value="1">
-                <StoreGrid products={articles} />
+                <StoreGrid products={articles} open={open} setOpen={setOpen} />
             </TabPanel>
             <TabPanel value="2">
-                <StoreGrid products={articles} />
+                <StoreGrid products={articles} open={open} setOpen={setOpen} />
             </TabPanel>
             <TabPanel value="3">
-                <StoreGrid products={articles} />
+                <StoreGrid products={articles} open={open} setOpen={setOpen} />
             </TabPanel>
             <TabPanel value="4">
-                <StoreGrid products={articles} />
+                <StoreGrid products={articles} open={open} setOpen={setOpen} />
             </TabPanel>
 
           </TabContext>
         </Box>
 
-        <Cart cart={state} />
+        <Cart cart={state} open={open} setOpen={setOpen} />
 
 
      </CartContext.Provider >

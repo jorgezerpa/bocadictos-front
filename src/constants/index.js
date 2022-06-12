@@ -1,6 +1,6 @@
 import { Fake } from '../assets';
 
-class Article {
+class Product {
     constructor(image, name, description, price, category ){
         this.image = image;
         this.name = name;
@@ -13,15 +13,15 @@ class Article {
 }
 
 
-const articles = [
-    new Article(Fake, 'title', 'some delicious description', 10, 'categorie'),
-    new Article(Fake, 'title', 'some delicious description', 10, 'categorie'),
-    new Article(Fake, 'title', 'some delicious description', 10, 'categorie'),
-    new Article(Fake, 'title', 'some delicious description', 10, 'categorie'),
-    new Article(Fake, 'title', 'some delicious description', 10, 'categorie'),
+const products = [
+    new Product(Fake, 'title', 'some delicious description', 10, 'categorie'),
+    new Product(Fake, 'title', 'some delicious description', 10, 'categorie'),
+    new Product(Fake, 'title', 'some delicious description', 10, 'categorie'),
+    new Product(Fake, 'title', 'some delicious description', 10, 'categorie'),
+    new Product(Fake, 'title', 'some delicious description', 10, 'categorie'),
 ]
 
 
 export {
-    articles,
+    products,
 }

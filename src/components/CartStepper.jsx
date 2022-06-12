@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
+import CartContext from '../context/cartContext';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -10,9 +11,10 @@ import { CartGrid, CartForm } from './';
 
 const steps = ['Carrito', 'Datos'];
 
-const CartStepper = () => {
+const CartStepper = ({ handleInputSubmit, handleBuy }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [state] = useContext(CartContext);
 
   const isStepOptional = (step) => {
     return false;
@@ -58,7 +60,7 @@ const CartStepper = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} sx={{marginBottom: '40px'}} >
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -77,28 +79,37 @@ const CartStepper = () => {
           );
         })}
       </Stepper>
+      
+      
       {activeStep === steps.length && (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            Tu compra Pedido fue realizado con éxito! en breve te cóntactamos 
+          <Typography variant='h6' >
+            Tú Pedido fue realizado con éxito!  
+          </Typography>
+          <Typography variant='body1' >
+            en breve alguien de nuestro equipo se podrá en contácto con tigo.
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Volver a la tienda</Button>
+            <Button variant='secondary' onClick={handleReset}>Volver a la tienda</Button>
           </Box>
         </React.Fragment>
       )}
 
       {activeStep === 0 && (
         <React.Fragment>
-          <CartGrid />
+          { state.products.length > 0 &&  <CartGrid />}
+          { state.products.length === 0 && (
+            <Typography variant='h6'>Aún no hay nada en tu carrito</Typography>
+          )}
+
+         
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-            Back
+            atras
           </Button>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Button onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          <Button onClick={handleNext} disabled={state.products.length === 0} >
+            {activeStep === steps.length - 1 ? 'Comprar' : 'Siguiente'}
           </Button>
         </Box>
       </React.Fragment>
@@ -106,14 +117,17 @@ const CartStepper = () => {
       
       {activeStep === 1 && (
         <React.Fragment>
-          <CartForm />
+          <CartForm handleInputSubmit = {handleInputSubmit} />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-              Back
+              atras
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            <Button onClick={() => {
+              handleNext();
+              handleBuy();
+            }} disabled={state.products.length === 0}>
+              {activeStep === steps.length - 1 ? 'Comprar' : 'siguiente'}
             </Button>
           </Box>
         </React.Fragment>
