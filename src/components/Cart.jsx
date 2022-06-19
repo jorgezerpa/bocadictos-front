@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import axios from 'axios';
 import CartContext from '../context/cartContext';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,35 +23,63 @@ const style = {
 };
 
 const Cart = ({ cart, open, setOpen }) => {
+  const [orderState, setOrderState] = useState('loading');
   const handleClose = () => setOpen(false);
   const [ state ] = useContext(CartContext);
-  const [orderData, setOrderData] =  useState({
-        contactInfo: {},
-         orderInfo: [...state.products]
-        });
+  const [orderData, setOrderData] =  useState({});
 
-    console.log(orderData);
 
   const handleInputSubmit = (data) => {
     setOrderData({
       ...orderData,
-      contactInfo: data
+      products : state.products.filter(product => product.quantity !==0 ),
+      clientInfo: data
     })
-    
+
   }
+  console.log(orderData);
   
+
+const testData =  {
+    "clientInfo": {
+        "name":"Elon Musk",
+        "phone":"0800pipirisnais",
+        "email":"elon_and_amber@musk.com"
+    },
+    "products" : [
+        {
+            "name":"cachetadas de will smith",
+            "quantity": "200",
+            "price": "10"
+        },
+        {
+            "name":"cachos de shakira",
+            "quantity": "20",
+            "price": "22"
+        }
+    ]
+  }
+
+
   const handleBuy = () => {
-    setOrderData({
-      ...orderData,
-      orderInfo: [ ...state.products ]
-    })
+    // const data = orderData;
+    // console.log(orderData);
+    axios.post('http://localhost:8000/api/v1/send-order', orderData )
+      .then(response =>{
+        setOrderState('success');
+        console.log(response)
+      })
+      .catch(e=>{
+        setOrderState('error');
+        console.log(e)
+      });
   };
 
   return (
     <div>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
-            <CartStepper handleInputSubmit={handleInputSubmit} handleBuy={handleBuy} />
+            <CartStepper orderState={ orderState } handleInputSubmit={handleInputSubmit} handleBuy={handleBuy} />
         </Box>
       </Modal>
     </div>
@@ -59,3 +88,6 @@ const Cart = ({ cart, open, setOpen }) => {
 
 
 export default Cart;
+
+
+

@@ -1,54 +1,63 @@
 export function addToCart(state, action){
-    const product = action.payload;
-    product.quantity += 1;    
+    const products = state.products;
+    const productId = products.findIndex(product=>product.id === action.payload.id);
+    products[productId].quantity += 1;
+    
     return {
         ...state,
-        products: [ ...state.products, product],
+        products: [ ...products],
     };
 }
 
 export function removeFromCart(state, action){
-    const index = state.products.findIndex(product=>product.id === action.payload.id );
-    if(index === -1 ) return {...state};
-    state.products[index].quantity = 0; //cause if I add the product again, it preserves the old quantity
+    const products = state.products;
+    const productId = products.findIndex(product=>product.id === action.payload.id);
+    products[productId].quantity = 0;
+
     return {
         ...state,
-        products: [...state.products.filter(product=>product.id !== action.payload.id)],
-        removedElementId: action.payload.id,
+        products: [...products],
     }
 }
 
 export function decreaseProductQuantity(state, action){
-    const productIndex = state.products.findIndex(product=> product.id === action.payload.id);
-    if(productIndex === -1 ) return {...state};
-    if(state.products[productIndex].quantity - 1 === 0) return removeFromCart(state, action);
-    else state.products[productIndex].quantity -= 1;    
+    const products = state.products;
+    const productId = products.findIndex(product=>product.id === action.payload.id);
+    products[productId].quantity -= 1;
+    
     return {
         ...state,
+        products: [...products],
     }
 }
 
 export function increaseProductQuantity(state, action){
     const products = state.products;
-    const productIndex = products.findIndex(product=> product.id === action.payload.id);
-    if(productIndex === -1 ) return {...state};
-    products[productIndex].quantity += 1;
-
+    const productId = products.findIndex(product=>product.id === action.payload.id);
+    products[productId].quantity += 1;
     return {
         ...state,
-        products: products,
-    };
+        products: [...products],
+    }
 }
 
 export function changeManuallyProductQuantity(state, action){
     const products = state.products;
     const productIndex = products.findIndex(product=> product.id === action.payload.product.id);
-    if(productIndex === -1 ) return {...state};
     products[productIndex].quantity = action.payload.newValue;
 
     return {
         ...state,
-        products: products,
+        products: [...products],
+    }; 
+}
+
+export function setCart(state, action){
+    const products = action.payload;
+    products.forEach(product => product.quantity = 0); 
+    return {
+        ...state,
+        products: [...products],
     }; 
 }
 

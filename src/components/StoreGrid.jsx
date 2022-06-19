@@ -9,7 +9,6 @@ import '../styles/Inputs.css';
 
 const StoreGrid = ({ products, open, setOpen }) => {
     const [state] = useContext(CartContext);
-    console.log(state);
 
     const handleOpen = () => {
         setOpen(true)
@@ -24,19 +23,11 @@ const StoreGrid = ({ products, open, setOpen }) => {
             </Button>
         </Box>
         <Grid container spacing={6} >
-            { products.map((product, index)=>{
-                let isAddedBool;    
-                state.products.forEach((stateProduct, index)=>{
-                    stateProduct.id === product.id ? isAddedBool = true : isAddedBool = false;
-                    stateProduct.id === state.removedElementId ? isAddedBool = false : isAddedBool = true;                     
-                })
-
-                return(
+            { products.map((product, index)=>(
                     <Grid item xs={12} sm={4} md={3}  key={product.name+index}>
-                        <StoreCard product={product} isAddedBool={isAddedBool} />
+                        <StoreCard product={product} />
                     </Grid>
-                )
-            })}
+            ))}
         </Grid>
     </Container>
   )

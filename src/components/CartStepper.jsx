@@ -11,7 +11,7 @@ import { CartGrid, CartForm } from './';
 
 const steps = ['Carrito', 'Datos'];
 
-const CartStepper = ({ handleInputSubmit, handleBuy }) => {
+const CartStepper = ({ handleInputSubmit, handleBuy, orderState }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [state] = useContext(CartContext);
@@ -83,15 +83,43 @@ const CartStepper = ({ handleInputSubmit, handleBuy }) => {
       
       {activeStep === steps.length && (
         <React.Fragment>
-          <Typography variant='h6' >
-            Tú Pedido fue realizado con éxito!  
-          </Typography>
-          <Typography variant='body1' >
-            en breve alguien de nuestro equipo se podrá en contácto con tigo.
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button variant='secondary' onClick={handleReset}>Volver a la tienda</Button>
-          </Box>
+          { orderState==='success' && (
+            <>
+              <Typography variant='h6' >
+                Tú Pedido fue realizado con éxito!  
+              </Typography>
+              <Typography variant='body1' >
+                en breve alguien de nuestro equipo se podrá en contácto con tigo.
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Button variant='secondary' onClick={handleReset}>Volver a la tienda</Button>
+              </Box>
+            </>
+          )}
+
+          { orderState==='error' && (
+            <>
+              <Typography variant='h6' >
+                ¡Vaya! ocurrió un error. No se pudo envíar tú pedido.  
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Button variant='secondary' onClick={handleReset}>Volver a la tienda</Button>
+              </Box>
+            </>
+          )}
+
+          { orderState==='loading' && (
+            <>
+              <Typography variant='h6' >
+                cargando  
+              </Typography>
+            </>
+          )}
+
+
+
+
+
         </React.Fragment>
       )}
 

@@ -8,48 +8,21 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 
 const CartCard = ({ product }) => {
     const myTheme = useTheme(); 
-    const [isAdded, setIsAdded] = useState(false);
     const [ state, dispatch, addProduct, removeProduct, increaseQuantity, decreaseQuantity, manualQuantityChange] = useContext(CartContext);
     const inputQuantity = useRef(null);
 
-
-
-    const HandleAddToCart = (product) => {
-        dispatch(addProduct(product))
-        setIsAdded(true);
-    }
-    
-    const HandleRemoveFromCart = (product) => {
-        dispatch(removeProduct(product))
-        setIsAdded(false);
-    }
-    
-    const handleIncreaseQuantity = (product) => {
-        dispatch(increaseQuantity(product))
-    }
-    
-    const handleDecreaseQuantity = (product) => {
-        dispatch(decreaseQuantity(product))
-        if(product.quantity - 1 === 0) setIsAdded(false);
-    }
+    const HandleRemoveFromCart = (product) => dispatch(removeProduct(product));
+    const handleIncreaseQuantity = (product) => dispatch(increaseQuantity(product));
+    const handleDecreaseQuantity = (product) => dispatch(decreaseQuantity(product));
 
     const handleChange = () => {
-        //avoid console advertisment --> can not parse NaN. if !isNaN, with onBlur function, we set to 1.
-        let newValue =  Number.isNaN(inputQuantity.current.value) ? parseInt(inputQuantity.current.value) : inputQuantity.current.value;
-        dispatch(manualQuantityChange(product, newValue));
+        dispatch(manualQuantityChange(product, inputQuantity.current.value));
     }
     
     const handleOnBlur = () => {
-        let newValue = parseInt(inputQuantity.current.value);
-        if(!Number.isInteger(newValue) || newValue<=0  ){
-            newValue = 0;
-            setIsAdded(false);
-            dispatch(removeProduct(product));
-            return;
-        } 
-        dispatch(manualQuantityChange(product, parseInt(newValue)))
+        let newValue = (inputQuantity.current.value=="" || inputQuantity.current.value<0 ) ? 0 : inputQuantity.current.value;
+        dispatch(manualQuantityChange(product, newValue));
     }
-
 
   return (
     <Card >

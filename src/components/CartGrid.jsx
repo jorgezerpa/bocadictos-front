@@ -12,7 +12,7 @@ const CartGrid = ({  }) => {
     return (
     <Container maxWidth='x1' sx={{ padding: '0'}} >
         <Grid container spacing={6} >
-            { state.products.map((product, index)=>(
+            { state.products.filter(product=> product.quantity>0 || product.quantity==="").map((product, index)=>(
                 <Grid item xs={12} sm={6}   key={product.name+index}>
                     <CartCard product={ product } />       
                 </Grid>

@@ -7,53 +7,31 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { increaseProductQuantity } from '../store/states';
 
-const StoreCard = ({ product, isAddedBool }) => {
+const StoreCard = ({ product }) => {
     const myTheme = useTheme(); 
     const [ state, dispatch, addProduct, removeProduct, increaseQuantity, decreaseQuantity, manualQuantityChange] = useContext(CartContext);
-
-
-
-    const [isAdded, setIsAdded] = useState(isAddedBool);
+    const [isWriting, setIsWriting] = useState(false);
     const inputQuantity = useRef(null);
 
 
-    const HandleAddToCart = (product) => {
-        dispatch(addProduct(product))
-        setIsAdded(true);
-    }
-    
-    const HandleRemoveFromCart = (product) => {
-        let a = dispatch(removeProduct(product));
-        setIsAdded(false);
-    }
-    
-    const handleIncreaseQuantity = (product) => {
-        dispatch(increaseQuantity(product))
-    }
-    
-    const handleDecreaseQuantity = (product) => {
-        dispatch(decreaseQuantity(product))
-        if(product.quantity - 1 === 0) setIsAdded(false);
-    }
+    const HandleAddToCart = (product) => dispatch(addProduct(product));
+    const HandleRemoveFromCart = (product) => dispatch(removeProduct(product));
+    const handleIncreaseQuantity = (product) => dispatch(increaseQuantity(product));
+    const handleDecreaseQuantity = (product) => dispatch(decreaseQuantity(product));
 
     const handleChange = () => {
-        //avoid console advertisment --> can not parse NaN. if !isNaN, with onBlur function, we set to 1.
-        let newValue =  Number.isNaN(inputQuantity.current.value) ? parseInt(inputQuantity.current.value) : inputQuantity.current.value;
-        dispatch(manualQuantityChange(product, newValue));
+        setIsWriting(true);
+        dispatch(manualQuantityChange(product, inputQuantity.current.value));
     }
     
     const handleOnBlur = () => {
-        let newValue = parseInt(inputQuantity.current.value);
-        if(!Number.isInteger(newValue) || newValue<=0  ){
-            newValue = 0;
-            setIsAdded(false);
-            dispatch(removeProduct(product));
-            return;
-        } 
-        dispatch(manualQuantityChange(product, parseInt(newValue)))
+        setIsWriting(false);
+        //change isNaN for isInteger????
+        let newValue = (inputQuantity.current.value=="" || inputQuantity.current.value<=0 ) ? 0 : inputQuantity.current.value;
+        dispatch(manualQuantityChange(product, newValue));
     }
-
-
+    
+    
   return (
     <Card>
         <CardMedia sx={{ position: 'relative', height: '100px', overflow: 'hidden'  }}>
@@ -64,18 +42,20 @@ const StoreCard = ({ product, isAddedBool }) => {
                 <Typography variant='body1'  gutterBottom sx={{fontSize: '.7rem' }} >{ product.description }</Typography>
                 <Typography sx={{fontSize: '.8rem', fontStyle:'italic'}} >{ product.price} $</Typography>
             </CardContent>
+            
             <CardActions sx={{display:'flex', justifyContent: 'space-between', alignItems: 'center'}} >
+                { product.quantity===0 && <Button variant='cardButton' onClick={()=>HandleAddToCart(product)} >Agregar</Button> }
+                { (product.quantity>0 || isWriting ) && (
+                    <>
+                        <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remover</Button> 
 
-                { !isAdded && <Button variant='cardButton' onClick={()=>HandleAddToCart(product)} >Agregar</Button> }
-                { isAdded && <Button variant='cardButton' onClick={()=>HandleRemoveFromCart(product)} >remover</Button> }
-
-                { isAdded && (
-                    <Box sx={{display:'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        <RemoveCircleIcon onClick={()=>handleDecreaseQuantity(product)}  sx={{color: myTheme.palette.primary.light }} />
-                        <input ref={inputQuantity} onBlur={handleOnBlur} onChange={handleChange}  type='number' value={ product.quantity } style={{ width: '2rem' }} ></input>
-                        <AddBoxIcon onClick={()=>handleIncreaseQuantity(product)} sx={{color: myTheme.palette.primary.light }} />
-                    </Box>
-                )}
+                        <Box sx={{display:'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <RemoveCircleIcon onClick={()=>handleDecreaseQuantity(product)}  sx={{color: myTheme.palette.primary.light }} />
+                            <input ref={inputQuantity} onBlur={handleOnBlur} onChange={handleChange}  type='number' value={ product.quantity } style={{ width: '2rem' }} ></input>
+                            <AddBoxIcon onClick={()=>handleIncreaseQuantity(product)} sx={{color: myTheme.palette.primary.light }} />
+                        </Box>
+                    </>
+                ) }
         </CardActions>
     </Card>
   )
