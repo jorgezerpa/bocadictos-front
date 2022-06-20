@@ -6,9 +6,11 @@ class FetchStore{
         return await products;
     }
     
-    getProduct(){
-    
+    async getCategories(){
+        const categories = await fetch('http://localhost:8000/api/v1/categories/');
+        return await categories;
     }
+    
 }
 
 export default FetchStore;

@@ -5,7 +5,8 @@ import { Container, Grid, Typography, Button, Box } from '@mui/material';
 const Contact = () => {
   return (
     <Container sx={{minHeight: '60vh', py:5}} maxWidth='x1'>
-      <Grid container>
+      <Typography my={5} pt={10} textAlign='center' variant='h3' >Contáctanos</Typography>
+      <Grid container sx={{display: 'flex' }}>
         <Grid minHeight='300px' item xs={12} sm={6} display='flex' position='relative' direction='column' justifyContent='center' alignItems='center' sx={{overflow:'hidden', position: 'relative'}}>
               <ContactMap />          
         </Grid>

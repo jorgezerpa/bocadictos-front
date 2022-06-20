@@ -110,9 +110,7 @@ const CartStepper = ({ handleInputSubmit, handleBuy, orderState }) => {
 
           { orderState==='loading' && (
             <>
-              <Typography variant='h6' >
-                cargando  
-              </Typography>
+            <Typography alignText='center' m={10} variant='h1'>Cargando...</Typography>
             </>
           )}
 

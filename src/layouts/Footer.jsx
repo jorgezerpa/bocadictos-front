@@ -17,7 +17,7 @@ const Footer = () => {
           </Grid>
     
           <Grid sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}} item xs={4}>
-              donita
+              
           </Grid>
     
           <Grid sx={{ display: 'flex', justifyContent:'center', alignItems: 'center', gap:'20px' }} item xs={4}>

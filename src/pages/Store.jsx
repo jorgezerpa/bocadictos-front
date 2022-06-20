@@ -16,6 +16,7 @@ const fetchStore = new FetchStore();
 export default function Store() {
   const [open, setOpen] = React.useState(false);
   const [productsState, setProductsState] = useState('loading');
+  const [categories, setCategories] = useState([]);
 
   const [value, setValue] = React.useState('1');
   const [state, dispatch] = useReducer(
@@ -38,7 +39,20 @@ export default function Store() {
         setProductsState('error');
         console.log(e)
       })
+    
+    fetchStore.getCategories()
+      .then(data => {
+        return data.json()
+      })
+      .then(categories=>{
+        setCategories(categories.data);
+      })
+      .catch(e=>{
+        setProductsState('error');
+        console.log(e)
+      })
   }, [])
+  console.log(categories);
 
 
   return (
@@ -46,12 +60,12 @@ export default function Store() {
       
       {productsState === 'loading' && (
         <Box sx={{ width: '100%', typography: 'body1' }}>
-          <Typography>Cargando...</Typography>
+          <Typography textAlign='center' m={10} variant='h5'>Cargando...</Typography>
         </Box>
       )} 
       {productsState === 'error' && (
         <Box sx={{ width: '100%', typography: 'body1' }}>
-          <Typography>¡Ups! no se pudieron cargar los Productos. Intenta reacargar la página.</Typography>
+          <Typography textAlign='center' m={10} variant='h5'>¡Ups! no se pudieron cargar los Productos. Intenta recargar la página.</Typography>
         </Box>
       )} 
 
@@ -61,25 +75,20 @@ export default function Store() {
             <TabContext value={value}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList variant="scrollable" onChange={handleChange} aria-label="" scrollButtons={true} allowScrollButtonsMobile>
-                  <Tab label="Todo" value="1" />
-                  <Tab label="Dulce" value="2" />
-                  <Tab label="Salado" value="3" />
-                  <Tab label="Combos" value="4" />
+                  <Tab label="Todo" value='1' />
+                  { categories.map((categorie, i)=>(
+                    <Tab key={categorie.name + categorie.id} label={ categorie.name } value={`${i+2}`} />
+                  ))}
                 </TabList>
               </Box>
-              <TabPanel value="1">
+              <TabPanel value='1'>
                   <StoreGrid products={state.products} open={open} setOpen={setOpen} />
               </TabPanel>
-              <TabPanel value="2">
-                  <StoreGrid products={state.products} open={open} setOpen={setOpen} />
-              </TabPanel>
-              <TabPanel value="3">
-                  <StoreGrid products={state.products} open={open} setOpen={setOpen} />
-              </TabPanel>
-              <TabPanel value="4">
-                  <StoreGrid products={state.products} open={open} setOpen={setOpen} />
-              </TabPanel>
-
+              { categories.map((categorie, i)=>(
+                <TabPanel key={categorie.name + categorie.id + 'tab'} value={`${i+2}`}>
+                    <StoreGrid products={state.products.filter(product=>product.categorie===categorie.name)} open={open} setOpen={setOpen} />
+                </TabPanel>
+              ))}
             </TabContext>
           </Box>
 
